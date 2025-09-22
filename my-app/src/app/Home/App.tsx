@@ -1,75 +1,53 @@
 import React, { useState } from "react";
-import {
-	StyleSheet,
-	Text,
-	View,
-	TextInput,
-	TouchableOpacity,
-	FlatList,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { styles } from "./styles";
-interface Item {
-	id: string;
-	nome: string;
-}
+import { View, Text } from "react-native";
+import InputProduct from "../../components/input/input.js";
+import ShoppingList from "../../components/lista/listaDeCompras.js";
+import styles from "./styles";
 
 export default function App() {
-	const [item, setItem] = useState<string>("");
-	const [lista, setLista] = useState<Item[]>([]);
+	const [items, setItems] = useState<string[]>(["Maçã", "Banana", "Melancia"]);
 
-	const adicionarItem = () => {
-		if (item.trim() === "") return;
-		setLista([...lista, { id: Date.now().toString(), nome: item }]);
-		setItem("");
+	// Função para adicionar novo item
+	const addItem = (item: string) => {
+		if (item.trim() !== "") {
+			setItems((prev) => [...prev, item]);
+		}
 	};
 
-	const renderItem = ({ item, index }: { item: Item; index: number }) => (
-		<View
-			style={[
-				styles.item,
-				// aplica linha embaixo de cada item, menos no último
-				index !== lista.length - 1 && styles.itemLinha,
-			]}
-		>
-			<AntDesign name="checkcircle" size={20} color="black" />
-			<Text style={styles.texto}>{item.nome}</Text>
-		</View>
-	);
+	// Função para excluir item pelo índice
+	const removeItem = (index: number) => {
+		setItems((prev) => prev.filter((_, i) => i !== index));
+	};
+
+	/*
+  // --- Código de contagem comentado ---
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
+  const [num3, setNum3] = useState(0);
+
+  const atualizarNumeros = () => {
+    setNum1((prev) => prev + 1);
+    setNum2((prev) => prev + 10);
+    setNum3((prev) => prev + 100);
+  };
+  */
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.titulo}>Lista de Compras</Text>
+			<Text style={styles.title}>Lista de Compras</Text>
 
-			<View style={styles.inputContainer}>
-				<TextInput
-					style={styles.input}
-					placeholder="Digite o Produto"
-					placeholderTextColor="#ccc"
-					value={item}
-					onChangeText={setItem}
-				/>
-				<TouchableOpacity style={styles.botao} onPress={adicionarItem}>
-					<AntDesign name="pluscircleo" size={24} color="white" />
-				</TouchableOpacity>
-			</View>
+			{/* Componente de entrada */}
+			<InputProduct onAdd={addItem} />
 
-			<View
-				style={{
-					borderColor: "#000",
-					borderWidth: 2,
-					borderRadius: 10,
-					padding: 10,
-					flex: 1,
-				}}
-			>
-				<FlatList
-					data={lista}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-				/>
-			</View>
+			{/* Lista de compras com botão de excluir */}
+			<ShoppingList items={items} onRemove={removeItem} />
+
+			{/*
+      <Text style={styles.text}>Número 1: {num1}</Text>
+      <Text style={styles.text}>Número 2: {num2}</Text>
+      <Text style={styles.text}>Número 3: {num3}</Text>
+      <Button title="Atualizar Números" onPress={atualizarNumeros} />
+      */}
 		</View>
 	);
 }
-
