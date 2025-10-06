@@ -1,20 +1,74 @@
-import { StyleSheet } from "react-native";
+// src/styles.ts
 
-export default StyleSheet.create({
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "flex-start",
+		backgroundColor: "#D1D1D1",
 		padding: 20,
 	},
-	title: {
-		fontSize: 28,
+	titulo: {
+		fontSize: 24,
 		fontWeight: "bold",
-		color: "#000",
-    marginTop: "15%"
+		alignSelf: "center",
+		marginTop: 60,
+		marginBottom: 20,
+		color: "#2E3A59",
 	},
-	text: {
+	input: {
+		backgroundColor: "#fff",
+		padding: 12,
+		borderRadius: 8,
+		marginBottom: 10,
+	},
+	botao: {
+		backgroundColor: "#3F51B5",
+		padding: 12,
+		borderRadius: 8,
+		alignItems: "center",
+		marginBottom: 20,
+	},
+	botaoTexto: {
+		color: "#fff",
+		fontWeight: "bold",
+	},
+	listaCabecalho: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		paddingBottom: 10,
+	},
+	listaTitulo: {
+		fontWeight: "bold",
+		fontSize: 15,
+	},
+	limparTexto: {
+		color: "red",
+		fontSize: 15,
+	},
+	itemLinha: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		backgroundColor: "#FFF",
+		padding: 10,
+		marginBottom: 8,
+		borderRadius: 6,
+	},
+	removerTexto: {
+		color: "red",
 		fontSize: 16,
-		color: "#3c096c",
+	},
+	totalBox: {
+		position: "absolute",
+		bottom: 20,
+		right: 20,
+		backgroundColor: "#FFF",
+		paddingVertical: 10,
+		paddingHorizontal: 50,
+		borderRadius: 20,
+	},
+	totalTexto: {
+		fontWeight: "bold",
+		fontSize: 16,
 	},
 });

@@ -1,53 +1,89 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
-import InputProduct from "../../components/input/input.js";
-import ShoppingList from "../../components/lista/listaDeCompras.js";
-import styles from "./styles";
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import { styles } from './styles';
 
 export default function App() {
-	const [items, setItems] = useState<string[]>(["Maçã", "Banana", "Melancia"]);
+  const [alimento, setAlimento] = useState('');
+  const [calorias, setCalorias] = useState('');
+  const [itens, setItens] = useState([]);
 
-	// Função para adicionar novo item
-	const addItem = (item: string) => {
-		if (item.trim() !== "") {
-			setItems((prev) => [...prev, item]);
-		}
-	};
-
-	// Função para excluir item pelo índice
-	const removeItem = (index: number) => {
-		setItems((prev) => prev.filter((_, i) => i !== index));
-	};
-
-	/*
-  // --- Código de contagem comentado ---
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
-  const [num3, setNum3] = useState(0);
-
-  const atualizarNumeros = () => {
-    setNum1((prev) => prev + 1);
-    setNum2((prev) => prev + 10);
-    setNum3((prev) => prev + 100);
+  const adicionarItem = () => {
+    if (alimento && calorias) {
+      const novoItem = {
+        id: Date.now().toString(),
+        nome: alimento,
+        calorias: parseInt(calorias)
+      };
+      setItens([...itens, novoItem]);
+      setAlimento('');
+      setCalorias('');
+    }
   };
-  */
 
-	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>Lista de Compras</Text>
+  const removerItem = (id: string) => {
+    setItens(itens.filter(item => item.id !== id));
+  };
 
-			{/* Componente de entrada */}
-			<InputProduct onAdd={addItem} />
+  const limparTodos = () => {
+    setItens([]);
+  };
 
-			{/* Lista de compras com botão de excluir */}
-			<ShoppingList items={items} onRemove={removeItem} />
+  const totalCalorias = itens.reduce((total, item) => total + item.calorias, 0);
 
-			{/*
-      <Text style={styles.text}>Número 1: {num1}</Text>
-      <Text style={styles.text}>Número 2: {num2}</Text>
-      <Text style={styles.text}>Número 3: {num3}</Text>
-      <Button title="Atualizar Números" onPress={atualizarNumeros} />
-      */}
-		</View>
-	);
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.titulo}>Calorias</Text>
+
+      <TextInput
+        placeholder="Digite o alimento"
+        style={styles.input}
+        value={alimento}
+        onChangeText={setAlimento}
+      />
+      <TextInput
+        placeholder="Digite as calorias"
+        style={styles.input}
+        value={calorias}
+        onChangeText={setCalorias}
+        keyboardType="numeric"
+      />
+
+      <TouchableOpacity style={styles.botao} onPress={adicionarItem}>
+        <Text style={styles.botaoTexto}>Adicionar</Text>
+      </TouchableOpacity>
+
+      <View style={styles.listaCabecalho}>
+        <Text style={styles.listaTitulo}>Item:</Text>
+        <Text style={styles.listaTitulo}>Calorias:</Text>
+        <TouchableOpacity onPress={limparTodos}>
+          <Text style={styles.limparTexto}>Limpar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={itens}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.itemLinha}>
+            <Text>{item.nome}</Text>
+            <Text>{item.calorias} kcal</Text>
+            <TouchableOpacity onPress={() => removerItem(item.id)}>
+              <Text style={styles.removerTexto}>🗑️</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+
+      <View style={styles.totalBox}>
+        <Text style={styles.totalTexto}>{totalCalorias} kcal</Text>
+      </View>
+    </SafeAreaView>
+  );
 }
