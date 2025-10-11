@@ -9,19 +9,27 @@ import {
 } from 'react-native';
 import { styles } from './styles';
 
+// 👇 Defina o tipo do item
+type Item = {
+  id: string;
+  nome: string;
+  calorias: number;
+};
+
 export default function App() {
   const [alimento, setAlimento] = useState('');
   const [calorias, setCalorias] = useState('');
-  const [itens, setItens] = useState([]);
+  // 👇 Diga ao React que "itens" é uma lista de "Item"
+  const [itens, setItens] = useState<Item[]>([]);
 
   const adicionarItem = () => {
     if (alimento && calorias) {
-      const novoItem = {
+      const novoItem: Item = {
         id: Date.now().toString(),
         nome: alimento,
-        calorias: parseInt(calorias)
+        calorias: parseInt(calorias),
       };
-      setItens([...itens, novoItem]);
+      setItens([...itens, novoItem]); // ✅ agora o TS entende o tipo
       setAlimento('');
       setCalorias('');
     }
